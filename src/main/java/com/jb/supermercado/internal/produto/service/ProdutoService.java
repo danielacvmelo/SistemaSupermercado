@@ -1,11 +1,12 @@
 package com.jb.supermercado.internal.produto.service;
 
+import com.jb.supermercado.config.exception.BusinessException;
 import com.jb.supermercado.config.exception.RecursoNaoEncontradoException;
 import com.jb.supermercado.internal.produto.dto.ProdutoRequestRecord;
 import com.jb.supermercado.internal.produto.dto.ProdutoResponseRecord;
+import com.jb.supermercado.internal.produto.entity.ProdutoEntity;
 import com.jb.supermercado.internal.produto.mapper.ProdutoMapperRecord;
 import com.jb.supermercado.internal.produto.repository.ProdutoRepository;
-import com.jb.supermercado.internal.produto.entity.ProdutoEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,10 @@ public class ProdutoService {
     }
 
     public void cadastrarProduto(ProdutoRequestRecord produtoRequest) {
+        boolean nomeJaExiste = this.produtoRepository.existsByNome(produtoRequest.nome());
+        if (nomeJaExiste) {
+            throw new BusinessException("Ja existe produto cadastrado com este nome");
+        }
         ProdutoEntity produtoEntity = ProdutoMapperRecord.requestParaEntidade(produtoRequest);
         this.produtoRepository.save(produtoEntity);
     }
@@ -36,8 +41,13 @@ public class ProdutoService {
     }
 
     public void atualizarProduto(Long id, ProdutoRequestRecord produtoRequest) {
-        ProdutoEntity produtoEntity = this.produtoRepository.findById(id).orElseThrow(()
-                -> new RecursoNaoEncontradoException("Produto nao Encontrado"));
+        ProdutoEntity produtoEntity = this.produtoRepository.findById(id).orElseThrow(() ->
+                new RecursoNaoEncontradoException("Produto nao Encontrado"));
+
+        if (!produtoEntity.getNome().equals(produtoRequest.nome()) && this.produtoRepository.existsByNome(produtoRequest.nome())) {
+            throw new BusinessException("Ja existe produto cadastrado com este nome");
+        }
+
         produtoEntity.setNome(produtoRequest.nome());
         produtoEntity.setDescricao(produtoRequest.descricao());
         produtoEntity.setPreco(produtoRequest.preco());
@@ -47,7 +57,9 @@ public class ProdutoService {
     }
 
     public void removerProduto(Long id) {
-        this.produtoRepository.deleteById(id);
+        ProdutoEntity produtoEntity = this.produtoRepository.findById(id).orElseThrow(() ->
+                new RecursoNaoEncontradoException("Produto nao Encontrado"));
+        this.produtoRepository.delete(produtoEntity);
     }
 }
 

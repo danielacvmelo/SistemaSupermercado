@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/src/main/java/com/jb/supermercado/config/exception/BusinessException.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/main/java/com/jb/supermercado/config/exception/BusinessException.java" />
+              <option name="updatedContent" value="package com.jb.supermercado.config.exception;&#10;&#10;public class BusinessException extends RuntimeException {&#10;    public BusinessException(String message) {&#10;        super(message);&#10;    }&#10;&#10;    public BusinessException(String message, Throwable cause) {&#10;        super(message, cause);&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/jb/supermercado/config/exception/RecursoNaoEncontradoException.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/main/java/com/jb/supermercado/config/exception/RecursoNaoEncontradoException.java" />
+              <option name="updatedContent" value="package com.jb.supermercado.config.exception;&#10;&#10;public class RecursoNaoEncontradoException extends RuntimeException {&#10;    public RecursoNaoEncontradoException(String message) {&#10;        super(message);&#10;    }&#10;&#10;    public RecursoNaoEncontradoException(String message, Throwable cause) {&#10;        super(message, cause);&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/jb/supermercado/config/exception/response/ErroPadraoResponse.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/main/java/com/jb/supermercado/config/exception/response/ErroPadraoResponse.java" />
+              <option name="updatedContent" value="package com.jb.supermercado.config.exception.response;&#10;&#10;import java.time.LocalDateTime;&#10;&#10;public record ErroPadraoResponse(&#10;        String mensagem,&#10;        Integer status,&#10;        LocalDateTime timestamp&#10;) {&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/jb/supermercado/config/exception/response/ErroValidacaoResponse.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/main/java/com/jb/supermercado/config/exception/response/ErroValidacaoResponse.java" />
+              <option name="updatedContent" value="package com.jb.supermercado.config.exception.response;&#10;&#10;import java.time.LocalDateTime;&#10;import java.util.List;&#10;&#10;public record ErroValidacaoResponse(&#10;        String mensagem,&#10;        Integer status,&#10;        LocalDateTime timestamp,&#10;        List&lt;ErroDetalhe&gt; erros&#10;) {&#10;    public record ErroDetalhe(String campo, String mensagem) {&#10;    }&#10;}&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/com/jb/supermercado/internal/produto/service/ProdutoService.java">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/main/java/com/jb/supermercado/internal/produto/service/ProdutoService.java" />
+              <option name="originalContent" value="package com.jb.supermercado.internal.produto.service;&#10;&#10;import com.jb.supermercado.config.exception.RecursoNaoEncontradoException;&#10;import com.jb.supermercado.internal.produto.dto.ProdutoRequestRecord;&#10;import com.jb.supermercado.internal.produto.dto.ProdutoResponseRecord;&#10;import com.jb.supermercado.internal.produto.mapper.ProdutoMapperRecord;&#10;import com.jb.supermercado.internal.produto.repository.ProdutoRepository;&#10;import com.jb.supermercado.internal.produto.entity.ProdutoEntity;&#10;import org.springframework.stereotype.Service;&#10;&#10;import java.util.List;&#10;&#10;@Service&#10;public class ProdutoService {&#10;&#10;    private final ProdutoRepository produtoRepository;&#10;&#10;    public ProdutoService(ProdutoRepository produtoRepository) {&#10;        this.produtoRepository = produtoRepository;&#10;    }&#10;&#10;    public List&lt;ProdutoResponseRecord&gt; listaProdutos() {&#10;        List&lt;ProdutoEntity&gt; produtos = this.produtoRepository.findAll();&#10;        return ProdutoMapperRecord.entidadeParaResponseRecordList(produtos);&#10;    }&#10;&#10;    public void cadastrarProduto(ProdutoRequestRecord produtoRequest) {&#10;        ProdutoEntity produtoEntity = ProdutoMapperRecord.requestParaEntidade(produtoRequest);&#10;        this.produtoRepository.save(produtoEntity);&#10;    }&#10;&#10;    public ProdutoResponseRecord buscarProdutoPorId(Long id) {&#10;        ProdutoEntity produtoEntity = this.produtoRepository.findById(id).orElseThrow(() -&gt;&#10;                new RecursoNaoEncontradoException(&quot;Produto nao Encontrado&quot;));&#10;        return ProdutoMapperRecord.entidadeParaResponse(produtoEntity);&#10;    }&#10;&#10;    public void atualizarProduto(Long id, ProdutoRequestRecord produtoRequest) {&#10;        ProdutoEntity produtoEntity = this.produtoRepository.findById(id).orElseThrow(()&#10;                -&gt; new RecursoNaoEncontradoException(&quot;Produto nao Encontrado&quot;));&#10;        produtoEntity.setNome(produtoRequest.nome());&#10;        produtoEntity.setDescricao(produtoRequest.descricao());&#10;        produtoEntity.setPreco(produtoRequest.preco());&#10;        produtoEntity.setQuantidadeEstoque(produtoRequest.quantidadeEstoque());&#10;        produtoEntity.setStatus(produtoRequest.status());&#10;        this.produtoRepository.save(produtoEntity);&#10;    }&#10;&#10;    public void removerProduto(Long id) {&#10;        this.produtoRepository.deleteById(id);&#10;    }&#10;}&#10;&#10;" />
+              <option name="updatedContent" value="package com.jb.supermercado.internal.produto.service;&#10;&#10;import com.jb.supermercado.config.exception.BusinessException;&#10;import com.jb.supermercado.config.exception.RecursoNaoEncontradoException;&#10;import com.jb.supermercado.internal.produto.dto.ProdutoRequestRecord;&#10;import com.jb.supermercado.internal.produto.dto.ProdutoResponseRecord;&#10;import com.jb.supermercado.internal.produto.entity.ProdutoEntity;&#10;import com.jb.supermercado.internal.produto.mapper.ProdutoMapperRecord;&#10;import com.jb.supermercado.internal.produto.repository.ProdutoRepository;&#10;import org.springframework.stereotype.Service;&#10;&#10;import java.util.List;&#10;&#10;@Service&#10;public class ProdutoService {&#10;&#10;    private final ProdutoRepository produtoRepository;&#10;&#10;    public ProdutoService(ProdutoRepository produtoRepository) {&#10;        this.produtoRepository = produtoRepository;&#10;    }&#10;&#10;    public List&lt;ProdutoResponseRecord&gt; listaProdutos() {&#10;        List&lt;ProdutoEntity&gt; produtos = this.produtoRepository.findAll();&#10;        return ProdutoMapperRecord.entidadeParaResponseRecordList(produtos);&#10;    }&#10;&#10;    public void cadastrarProduto(ProdutoRequestRecord produtoRequest) {&#10;        boolean nomeJaExiste = this.produtoRepository.existsByNome(produtoRequest.nome());&#10;        if (nomeJaExiste) {&#10;            throw new BusinessException(&quot;Ja existe produto cadastrado com este nome&quot;);&#10;        }&#10;        ProdutoEntity produtoEntity = ProdutoMapperRecord.requestParaEntidade(produtoRequest);&#10;        this.produtoRepository.save(produtoEntity);&#10;    }&#10;&#10;    public ProdutoResponseRecord buscarProdutoPorId(Long id) {&#10;        ProdutoEntity produtoEntity = this.produtoRepository.findById(id).orElseThrow(() -&gt;&#10;                new RecursoNaoEncontradoException(&quot;Produto nao Encontrado&quot;));&#10;        return ProdutoMapperRecord.entidadeParaResponse(produtoEntity);&#10;    }&#10;&#10;    public void atualizarProduto(Long id, ProdutoRequestRecord produtoRequest) {&#10;        ProdutoEntity produtoEntity = this.produtoRepository.findById(id).orElseThrow(() -&gt;&#10;                new RecursoNaoEncontradoException(&quot;Produto nao Encontrado&quot;));&#10;&#10;        if (!produtoEntity.getNome().equals(produtoRequest.nome()) &amp;&amp; this.produtoRepository.existsByNome(produtoRequest.nome())) {&#10;            throw new BusinessException(&quot;Ja existe produto cadastrado com este nome&quot;);&#10;        }&#10;&#10;        produtoEntity.setNome(produtoRequest.nome());&#10;        produtoEntity.setDescricao(produtoRequest.descricao());&#10;        produtoEntity.setPreco(produtoRequest.preco());&#10;        produtoEntity.setQuantidadeEstoque(produtoRequest.quantidadeEstoque());&#10;        produtoEntity.setStatus(produtoRequest.status());&#10;        this.produtoRepository.save(produtoEntity);&#10;    }&#10;&#10;    public void removerProduto(Long id) {&#10;        ProdutoEntity produtoEntity = this.produtoRepository.findById(id).orElseThrow(() -&gt;&#10;                new RecursoNaoEncontradoException(&quot;Produto nao Encontrado&quot;));&#10;        this.produtoRepository.delete(produtoEntity);&#10;    }&#10;}&#10;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
